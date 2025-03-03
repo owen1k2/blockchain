@@ -1,9 +1,11 @@
 # Project: Block Chain
 
-Authors: (_TODO: fill in names here!_)
+Authors: Owen Block
 
 ## Resources
 
-*   (_TODO: fill in resources here!_)
-*   ...
-*   ...
+*   Visual Studio Code
+*   Java 17.0.14
+*   Program Instructions
+*   Starter Code from Professor Osera's Github
+*   Java API
