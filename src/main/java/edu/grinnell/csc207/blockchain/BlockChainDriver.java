@@ -10,7 +10,11 @@ public class BlockChainDriver {
      * @param args the command-line arguments
      */
     public static void main(String[] args) {
-        System.out.println("Hello world!");
-        // TODO: fill me in!
+        if(Integer.parseInt(args[0]) < 0) {
+            System.out.println("Must enter a non-negative integer");
+            System.exit(0);
+        }  else {
+            
+        }
     }  
 }

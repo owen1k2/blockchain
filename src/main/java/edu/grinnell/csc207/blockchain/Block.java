@@ -79,9 +79,12 @@ public class Block {
     public Hash getHash() {
         return this.current;
     }
-/* 
+ 
     public String toString() {
-
+        String s = "Block " + this.num + "(Amount: " + this.amount + ", "
+                    + "Nonce: " + this.nonce + ", PrevHash:" + this.previous
+                    + ", hash: " + this.current + ")";
+        return s; 
     }
-*/
+
 }

@@ -30,12 +30,12 @@ public class Hash {
      */
     public boolean isValid() {
         int count = 0;
-        for(int x = 0; x < 3; x++) {
-            if(arr[x] == 0) {
+        for (int x = 0; x < 3; x++) {
+            if (arr[x] == 0) {
                 count++;
             }
         }
-        if(count == 3) {
+        if (count == 3) {
             return true;
         }
         return false;
@@ -48,7 +48,7 @@ public class Hash {
      */
     public String toString() {
         String s = "";
-        for(int i = 0; i < arr.length; i++) {
+        for (int i = 0; i < arr.length; i++) {
             s = s + Byte.toUnsignedInt(arr[i]);
         }
         return String.format(s, s.hashCode());
@@ -61,9 +61,6 @@ public class Hash {
      */
     public boolean equals(Object other) {
         Hash o = (Hash) other;
-       // if(Arrays.equals(o, arr){
-        //    return true;
-       // }
-        return false;
+        return Arrays.equals(o.getData(), arr);
     }
 }
