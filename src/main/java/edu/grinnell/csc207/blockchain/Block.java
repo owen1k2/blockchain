@@ -1,5 +1,7 @@
 package edu.grinnell.csc207.blockchain;
 
+import java.security.NoSuchAlgorithmException;
+
 /**
  * A single block of a blockchain.
  */
@@ -9,28 +11,53 @@ public class Block {
     Hash previous;
     long nonce;
     Hash current;
-    
+
     /**
      * Creates a new block from the parameters and will perform the
      * mining operation to discover the nonce and hash for this block
      * given these parameters
-     * @param num int: The number of the block in the blockchain
-     * @param amount int: The amount transferred between the two parties
+     * 
+     * @param num      int: The number of the block in the blockchain
+     * @param amount   int: The amount transferred between the two parties
      * @param prevHash Hash: The hash from the previous block
+     * @throws NoSuchAlgorithmException
      */
-    public Block(int num, int amount, Hash prevHash) {
+    public Block(int num, int amount, Hash prevHash) throws NoSuchAlgorithmException {
         this.num = num;
         this.amount = amount;
         this.previous = prevHash;
+        long currentNonce = helperNonce(amount);
+        this.nonce = currentNonce;
+        Hash currentHash = new Hash(Hash.calculateHash(num, amount, prevHash, currentNonce));
+        this.current = currentHash;
+    }
+
+    /**
+     * A helper function that finds the nonce for my first block.
+     * @param amount int: The amount in the first block.
+     * @return long: The noce of the first block
+     * @throws NoSuchAlgorithmException
+     */
+    public long helperNonce(int amount) throws NoSuchAlgorithmException {
+        long newNonce = 0;
+        Hash h = new Hash(Hash.calculateHash(num, amount, previous, newNonce));
+
+        while (!h.isValid()) {
+            newNonce++;
+            h = new Hash(Hash.calculateHash(num, amount, previous, newNonce));
+        }
+
+        return newNonce;
     }
 
     /**
      * Creates a new block from the parameters and using the provided nonce
      * and additional parameters generates the hash for the block.
-     * @param num int: The number of the block in the blockchain
-     * @param amount int: The amount transferred between the two parties
+     * 
+     * @param num      int: The number of the block in the blockchain
+     * @param amount   int: The amount transferred between the two parties
      * @param prevHash Hash: The hash of the previous block
-     * @param nonce lng: The nonce
+     * @param nonce    lng: The nonce
      */
     public Block(int num, int amount, Hash prevHash, long nonce) {
         this.num = num;
@@ -42,6 +69,7 @@ public class Block {
 
     /**
      * Returns the number of the block in the blockchain
+     * 
      * @return int: The number of the block in the blockchain
      */
     public int getNum() {
@@ -50,6 +78,7 @@ public class Block {
 
     /**
      * Returns the amount of the block
+     * 
      * @return int: The amount of the block
      */
     public int getAmount() {
@@ -58,6 +87,7 @@ public class Block {
 
     /**
      * Returns the nonce of the block
+     * 
      * @return long: nonce
      */
     public long getNonce() {
@@ -66,6 +96,7 @@ public class Block {
 
     /**
      * Returns the hash of the previous block
+     * 
      * @return Hash: The hash of the previous block
      */
     public Hash getPrevHash() {
@@ -74,17 +105,25 @@ public class Block {
 
     /**
      * Returns the hash of the block
+     * 
      * @return Hash: The hash of the block
      */
     public Hash getHash() {
         return this.current;
     }
- 
+
     public String toString() {
+        String prev;
+        if (this.previous == null) {
+            prev = "null";
+        } else {
+            prev = this.previous.toString();
+        }
         String s = "Block " + this.num + "(Amount: " + this.amount + ", "
-                    + "Nonce: " + this.nonce + ", PrevHash:" + this.previous
-                    + ", hash: " + this.current + ")";
-        return s; 
+                + "Nonce: " + this.nonce + ", PrevHash:" + prev
+                + ", hash: " + this.current + ")";
+
+        return s;
     }
 
 }

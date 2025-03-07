@@ -9,3 +9,11 @@ Authors: Owen Block
 *   Program Instructions
 *   Starter Code from Professor Osera's Github
 *   Java API
+
+## Commits:
+
+*   Hash is updated and functional
+*   Block is updated and functional
+*   Blockchain has some methods updated but still no nonce
+*   BlockChainDriver has been updated.
+*   JavaDocs update
