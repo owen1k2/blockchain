@@ -8,9 +8,14 @@ import java.util.Scanner;
  */
 public class BlockChainDriver {
 
+    /**
+     * Prints the message displayed at the end of each
+     * section of the switch statement
+     * 
+     * @param b Blockchain: the blockchain that is being updated
+     */
     public static void printHelper(BlockChain b) {
-        // System.out.println(b.toString());
-        System.out.println("\n\nWill Print BlockChain");
+        System.out.print("\n" + b.toString());
         System.out.print("Command? ");
     }
 
@@ -26,28 +31,27 @@ public class BlockChainDriver {
         } else {
             Scanner in = new Scanner(System.in);
             BlockChain b = new BlockChain(Integer.parseInt(args[0]));
-            int a = 0;
-            Block newBlock = null;
-            long n = 0;
-
-            // System.out.println(b.toString());
-            System.out.println("This will pring ToString\n" +
-                    "Command? ");
+            System.out.print(b.toString()
+                    + "Command? ");
 
             while (true) {
                 switch (in.next()) {
-                    case "mine":
+                    case "mine": {
                         System.out.print("Amount transferred? ");
-                        a = in.nextInt();
-                        newBlock = b.mine(a);
-                        System.out.print("amount = " + a + ", nonce = " + newBlock.getNonce() + "\n");
+                        int a = in.nextInt();
+                        Block newBlock = b.mine(a);
+                        System.out.print("amount = " + a + ", nonce = "
+                                        + newBlock.getNonce() + "\n");
                         printHelper(b);
                         break;
+                    }
                     case "append":
                         System.out.print("Amount transferred? ");
-                        a = in.nextInt();
+                        int a = in.nextInt();
                         System.out.print("Nonce? ");
-                        n = in.nextLong();
+                        long n = in.nextLong();
+                        Block newBlock = new Block(b.last.value.getNum()
+                                        + 1, a, b.last.value.getHash(), n);
                         b.append(newBlock);
                         printHelper(b);
                         break;
@@ -56,7 +60,7 @@ public class BlockChainDriver {
                         printHelper(b);
                         break;
                     case "check":
-                        if(b.isValidBlockChain()) {
+                        if (b.isValidBlockChain()) {
                             System.out.println("Chain is valid!");
                         } else {
                             System.out.println("Chain is invalid!");
@@ -68,22 +72,24 @@ public class BlockChainDriver {
                         printHelper(b);
                         break;
                     case "help":
-                        System.out.println("Valid commands:\n" +
-                                "\tmine: discovers the nonce for a given transaction\n" +
-                                "\tappend: appends a new block onto the end of the chain\n" +
-                                "\tremove: removes the last block from the end of the chain\n" +
-                                "\tcheck: checks that the block chain is valid\n" +
-                                "\treport: reports the balances of Alice and Bob\n" +
-                                "\thelp: prints this list of commands\n" +
-                                "\tquit: quites the program");
+                        System.out.println("Valid commands:\n"
+                                + "\tmine: discovers the nonce for a given transaction\n"
+                                + "\tappend: appends a new block onto the end of the chain\n"
+                                + "\tremove: removes the last block from the end of the chain\n"
+                                + "\tcheck: checks that the block chain is valid\n"
+                                + "\treport: reports the balances of Alice and Bob\n"
+                                + "\thelp: prints this list of commands\n"
+                                + "\tquit: quites the program");
                         printHelper(b);
                         break;
-                    case "quite":
+                    case "quit":
                         in.close();
                         System.exit(-1);
                         break;
                     default:
-                        System.out.println("Invalid Command. Enter command <help> to see a list of commands");
+                        System.out.println("Invalid Command. Enter command"
+                                        + "<help> to see a list of commands");
+                        printHelper(b);
                         break;
                 }
             }

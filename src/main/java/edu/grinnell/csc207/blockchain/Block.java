@@ -34,6 +34,7 @@ public class Block {
 
     /**
      * A helper function that finds the nonce for my first block.
+     * 
      * @param amount int: The amount in the first block.
      * @return long: The noce of the first block
      * @throws NoSuchAlgorithmException
@@ -59,11 +60,13 @@ public class Block {
      * @param prevHash Hash: The hash of the previous block
      * @param nonce    lng: The nonce
      */
-    public Block(int num, int amount, Hash prevHash, long nonce) {
+    public Block(int num, int amount, Hash prevHash, long nonce) throws NoSuchAlgorithmException {
         this.num = num;
         this.amount = amount;
         this.previous = prevHash;
         this.nonce = nonce;
+        Hash currentHash = new Hash(Hash.calculateHash(num, amount, prevHash, nonce));
+        this.current = currentHash;
 
     }
 
@@ -112,6 +115,11 @@ public class Block {
         return this.current;
     }
 
+    /**
+     * Returns the to string of a given block
+     * 
+     * @return String: The toString of the given block.
+     */
     public String toString() {
         String prev;
         if (this.previous == null) {
@@ -121,7 +129,7 @@ public class Block {
         }
         String s = "Block " + this.num + "(Amount: " + this.amount + ", "
                 + "Nonce: " + this.nonce + ", PrevHash:" + prev
-                + ", hash: " + this.current + ")";
+                + ", hash: " + this.current.toString() + ")";
 
         return s;
     }

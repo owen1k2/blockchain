@@ -50,8 +50,7 @@ public class Hash {
     }
 
     /**
-     * Returns the string representation of a hash as a string of
-     * hexadecinewNonce++;mal digits
+     * Returns the string representation of a hash as a string
      * 
      * @return String: String representation of a hash
      */
@@ -66,6 +65,7 @@ public class Hash {
     /**
      * Returns true if this hash is structurally equal to the argument
      * 
+     * @param other Object: the object we are comparing
      * @return Boolean: True if the hash is structurally equal,
      *         false otherwise
      */

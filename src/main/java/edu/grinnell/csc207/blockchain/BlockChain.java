@@ -8,6 +8,9 @@ import java.security.NoSuchAlgorithmException;
  */
 public class BlockChain {
 
+    /**
+     * The class Node which makes a node for our BlockChain
+     */
     public class Node {
         public Block value;
         public Node next;
@@ -18,25 +21,38 @@ public class BlockChain {
         }
     }
 
-    private Node first;
-    private Node last;
-    private int currentAmountAnna = 0;
-    private int currentAmountBob = 0;
+    public Node first;
+    public Node last;
 
+    /**
+     * The creation of block chain
+     * 
+     * @param initial int: The initial amount in Block Chain
+     * @throws NoSuchAlgorithmException
+     */
     public BlockChain(int initial) throws NoSuchAlgorithmException {
         Block b = new Block(0, initial, null);
         first = new Node(b, null);
         last = first;
     }
 
+    /**
+     * Finds the nonce for the first block of our BlockChain
+     * 
+     * @param amount int: The amount for the first nonce
+     * @return long: The none for the first block of our BlockChain
+     * @throws NoSuchAlgorithmException
+     */
     public long helperNonce(int amount) throws NoSuchAlgorithmException {
         long newNonce = 0;
-        Hash h = new Hash(Hash.calculateHash(last.value.getNum() + 1, amount, last.value.getHash(), newNonce));
+        Hash h = new Hash(Hash.calculateHash(last.value.getNum() + 1,
+                    amount, last.value.getHash(), newNonce));
 
         while (!(h.isValid())) {
             newNonce++;
             // System.out.println("help");
-            h = new Hash(Hash.calculateHash(last.value.getNum() + 1, amount, last.value.getHash(), newNonce));
+            h = new Hash(Hash.calculateHash(last.value.getNum() + 1,
+                    amount, last.value.getHash(), newNonce));
         }
         return newNonce;
     }
@@ -50,26 +66,14 @@ public class BlockChain {
      */
     public Block mine(int amount) throws NoSuchAlgorithmException {
         long newNonce = 0;
-        Hash h = new Hash(Hash.calculateHash(last.value.getNum() + 1, amount, last.value.getHash(), newNonce));
+        Hash h = new Hash(Hash.calculateHash(last.value.getNum() + 1,
+                    amount, last.value.getHash(), newNonce));
         while (!h.isValid()) {
-         //   System.out.println("3");
             newNonce++;
-            h = new Hash(Hash.calculateHash(last.value.getNum() + 1, amount, last.value.getHash(), newNonce));
+            h = new Hash(Hash.calculateHash(last.value.getNum() + 1,
+                    amount, last.value.getHash(), newNonce));
         }
         Block b = new Block(last.value.getNum() + 1, amount, last.value.getHash(), newNonce);
-        if(b.getHash() == null) {
-            System.out.println("sad");
-        }
-        if (currentAmountAnna == 0 && currentAmountBob == 0) {
-            currentAmountAnna = amount;
-        } else if (amount > 0) {
-            currentAmountAnna = currentAmountAnna + amount;
-            currentAmountBob = currentAmountBob - amount;
-        } else {
-            currentAmountAnna = currentAmountAnna - amount;
-            currentAmountBob = currentAmountBob + amount;
-        }
-
         return b;
     }
 
@@ -88,10 +92,11 @@ public class BlockChain {
      * @param blk block: The block being added to the list
      */
     public void append(Block blk) {
-        if (blk.getHash().isValid() && currentAmountAnna >= 0 && currentAmountBob >= 0) {
-            Node temp = last.next;
-            temp.value = blk;
-            last = temp;
+        if (blk.getHash().isValid()) {
+            Node temp = new Node(blk, null);
+            last.next = temp;
+            last = last.next;
+
         }
     }
 
@@ -102,7 +107,7 @@ public class BlockChain {
      * @return boolean: True if a block is removed, false otherwise
      */
     public boolean removeLast() {
-        if (last.value.getNum() == 1) {
+        if (last.value.getNum() == 0) {
             return false;
         } else {
             Node temp = first;
@@ -132,10 +137,10 @@ public class BlockChain {
     public boolean isValidBlockChain() {
         int anna = first.value.getAmount();
         int bob = 0;
-        Node temp = first.next;
+        Node temp = first;
         while (temp.next != null) {
-            anna = anna + temp.value.getAmount();
-            bob = bob - temp.value.getAmount();
+            anna = anna + temp.next.value.getAmount();
+            bob = bob - temp.next.value.getAmount();
             temp = temp.next;
 
             if (bob < 0 || anna < 0) {
@@ -153,13 +158,13 @@ public class BlockChain {
         int bob = 0;
         String s = "";
 
-        Node temp = first.next;
+        Node temp = first;
         while (temp.next != null) {
-            anna = anna + temp.value.getAmount();
-            bob = bob - temp.value.getAmount();
+            anna = anna + temp.next.value.getAmount();
+            bob = bob - temp.next.value.getAmount();
             temp = temp.next;
         }
-        s = "Anna: " + anna + ", Bob: " + bob;
+        s = "Alice: " + anna + ", Bob: " + bob;
         System.out.println(s);
     }
 
@@ -171,9 +176,9 @@ public class BlockChain {
     public String toString() {
         Node temp = first;
         String s = "";
-
         while (temp != null) {
             s = s + temp.value.toString() + "\n";
+            temp = temp.next;
         }
         return s;
     }
